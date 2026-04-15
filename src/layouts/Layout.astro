@@ -39,7 +39,7 @@ let allTags: string[] = [];
 if (showSidebar) {
   const products = await getCollection('products', ({ id }) => id.startsWith(`${lang}/`));
   const articles = await getCollection('articles', ({ id }) => id.startsWith(`${lang}/`));
-  allTags = [...new Set([...products, ...articles].flatMap(item => item.data.tags))];
+  allTags = [...new Set([...products, ...articles].flatMap(item => item.data.tags))].sort((a, b) => a.localeCompare(b));
 }
 
 const tagLabels: Record<string, string> = {
