@@ -20,7 +20,8 @@ const langNames: Record<string, string> = {
 };
 
 const currentPath = Astro.url.pathname;
-const pathWithoutLang = currentPath.replace(/^\/(en|ja|ko|zh-hans|zh-hant)/, '');
+const isTagPage = currentPath.includes('/tags/');
+const pathWithoutLang = isTagPage ? '' : currentPath.replace(/^\/(en|ja|ko|zh-hans|zh-hant)/, '');
 
 const navLabels: Record<string, { products: string; articles: string }> = {
   en: { products: 'Products', articles: 'Articles' },
