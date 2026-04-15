@@ -5,6 +5,7 @@ tags: ["开源", "云", "成本管理"]
 publishedAt: 2026-04-10
 iherbLink: "https://cn.iherb.com/cost-firewall"
 price: "¥299"
+featured: true
 ---
 
 成本防火墙帮助您监控和控制跨多个提供商的云支出。

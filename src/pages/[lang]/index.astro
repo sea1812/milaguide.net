@@ -17,11 +17,30 @@ const products = await getCollection('products', ({ id }) => id.startsWith(`${la
 const articles = await getCollection('articles', ({ id }) => id.startsWith(`${lang}/`));
 const allTags = [...new Set([...products, ...articles].flatMap(item => item.data.tags))];
 
+const sortedProducts = products.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+});
+
+const sortedArticles = articles.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+});
+
 const labels: Record<string, { products: string; articles: string; byCategory: string; recent: string; browseByTag: string; quickLinks: string }> = {
   en: { products: 'Products', articles: 'Articles', byCategory: 'by Category', recent: 'Recent', browseByTag: 'Browse by Tag', quickLinks: 'Quick Links' },
   ja: { products: '製品', articles: '記事', byCategory: 'カテゴリ', recent: '最新', browseByTag: 'タグで 浏览', quickLinks: 'クイックリンク' },
   ko: { products: '제품', articles: '기사', byCategory: '카테고리', recent: '최신', browseByTag: '태그로 浏览', quickLinks: '빠른 링크' },
   zh: { products: '产品', articles: '文章', byCategory: '分类', recent: '最新', browseByTag: '标签浏览', quickLinks: '快速链接' }
+};
+
+const featuredLabels: Record<string, string> = {
+  en: 'Featured',
+  ja: '注目',
+  ko: '추천',
+  zh: '精选'
 };
 
 const l = labels[lang];
@@ -130,9 +149,12 @@ const l = labels[lang];
         <div class="craigslist-link-group">
           <div class="craigslist-link-group-title">{l.recent}</div>
           <div class="craigslist-link-list">
-            {products.slice(0, 4).map(p => (
+            {sortedProducts.slice(0, 4).map(p => (
               <div class="craigslist-item">
-                <a class="craigslist-item-title" href={`/${lang}/p/${p.id.replace(`${lang}/`, '').replace('.md', '')}`}>{p.data.title}</a>
+                <a class="craigslist-item-title" href={`/${lang}/p/${p.id.replace(`${lang}/`, '').replace('.md', '')}`}>
+                  {p.data.title}
+                  {p.data.featured && <span class="featured-badge">{featuredLabels[lang]}</span>}
+                </a>
                 <span class="craigslist-item-desc">{p.data.description}</span>
               </div>
             ))}
@@ -155,9 +177,12 @@ const l = labels[lang];
         <div class="craigslist-link-group">
           <div class="craigslist-link-group-title">{l.recent}</div>
           <div class="craigslist-link-list">
-            {articles.slice(0, 4).map(a => (
+            {sortedArticles.slice(0, 4).map(a => (
               <div class="craigslist-item">
-                <a class="craigslist-item-title" href={`/${lang}/a/${a.id.replace(`${lang}/`, '').replace('.md', '')}`}>{a.data.title}</a>
+                <a class="craigslist-item-title" href={`/${lang}/a/${a.id.replace(`${lang}/`, '').replace('.md', '')}`}>
+                  {a.data.title}
+                  {a.data.featured && <span class="featured-badge">{featuredLabels[lang]}</span>}
+                </a>
                 <span class="craigslist-item-desc">{a.data.description}</span>
               </div>
             ))}
