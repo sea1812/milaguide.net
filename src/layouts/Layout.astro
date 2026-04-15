@@ -1,23 +1,132 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+import '../styles/global.css';
+import { getCollection } from 'astro:content';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+interface Props {
+  title: string;
+  lang: string;
+  showSidebar?: boolean;
+}
+
+const { title, lang, showSidebar = true } = Astro.props;
+
+const languages = ['en', 'ja', 'ko', 'zh'];
+const langNames: Record<string, string> = {
+  en: 'English',
+  ja: '日本語',
+  ko: '한국어',
+  zh: '中文'
+};
+
+const currentPath = Astro.url.pathname;
+const pathWithoutLang = currentPath.replace(/^\/(en|ja|ko|zh)/, '');
+
+const navLabels: Record<string, { products: string; articles: string }> = {
+  en: { products: 'Products', articles: 'Articles' },
+  ja: { products: '製品', articles: '記事' },
+  ko: { products: '제품', articles: '기사' },
+  zh: { products: '产品', articles: '文章' }
+};
+
+const navItems = [
+  { label: navLabels[lang].products, path: `/${lang}/p` },
+  { label: navLabels[lang].articles, path: `/${lang}/a` }
+];
+
+const isActive = (path: string) => currentPath.startsWith(path);
+
+let allTags: string[] = [];
+if (showSidebar) {
+  const products = await getCollection('products', ({ id }) => id.startsWith(`${lang}/`));
+  const articles = await getCollection('articles', ({ id }) => id.startsWith(`${lang}/`));
+  allTags = [...new Set([...products, ...articles].flatMap(item => item.data.tags))];
+}
+
+const tagLabels: Record<string, string> = {
+  en: 'Tags',
+  ja: 'タグ',
+  ko: '태그',
+  zh: '标签'
+};
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="nav-left">
+        <a href={`/${lang}`} class="site-title">MilaGuide</a>
+        <div class="nav-links">
+          {navItems.map(item => (
+            <a 
+              href={item.path}
+              class={isActive(item.path) ? 'active' : ''}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="lang-dropdown">
+          <button class="lang-dropbtn">
+            {langNames[lang]}
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12">
+              <path fill="currentColor" d="M3 4.5L6 8l3-3.5H3z"/>
+            </svg>
+          </button>
+          <div class="lang-dropdown-content">
+            {languages.map(l => (
+              <a 
+                href={`/${l}${pathWithoutLang}`}
+                class={l === lang ? 'active' : ''}
+              >
+                {langNames[l]}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  {showSidebar ? (
+    <div class="layout-container">
+      <aside class="sidebar">
+        <h3>{tagLabels[lang]}</h3>
+        <div class="sidebar-tags">
+          <a href={`/${lang}/p`} class="sidebar-tag">All</a>
+          {allTags.map(tag => (
+            <a 
+              href={`/${lang}/tags/${tag}`} 
+              class={`sidebar-tag ${currentPath.includes(`/tags/${tag}`) ? 'active' : ''}`}
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      </aside>
+      <main>
+        <slot />
+      </main>
+    </div>
+  ) : (
+    <main>
+      <slot />
+    </main>
+  )}
+
+  <footer>
+    <p>&copy; 2026 MilaGuide. All rights reserved.</p>
+  </footer>
+</body>
+</html>

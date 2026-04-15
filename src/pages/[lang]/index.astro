@@ -1,0 +1,204 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'ja' } },
+    { params: { lang: 'ko' } },
+    { params: { lang: 'zh' } }
+  ];
+}
+
+const { lang } = Astro.params;
+
+const products = await getCollection('products', ({ id }) => id.startsWith(`${lang}/`));
+const articles = await getCollection('articles', ({ id }) => id.startsWith(`${lang}/`));
+const allTags = [...new Set([...products, ...articles].flatMap(item => item.data.tags))];
+
+const labels: Record<string, { products: string; articles: string; byCategory: string; recent: string; browseByTag: string; quickLinks: string }> = {
+  en: { products: 'Products', articles: 'Articles', byCategory: 'by Category', recent: 'Recent', browseByTag: 'Browse by Tag', quickLinks: 'Quick Links' },
+  ja: { products: '製品', articles: '記事', byCategory: 'カテゴリ', recent: '最新', browseByTag: 'タグで 浏览', quickLinks: 'クイックリンク' },
+  ko: { products: '제품', articles: '기사', byCategory: '카테고리', recent: '최신', browseByTag: '태그로 浏览', quickLinks: '빠른 링크' },
+  zh: { products: '产品', articles: '文章', byCategory: '分类', recent: '最新', browseByTag: '标签浏览', quickLinks: '快速链接' }
+};
+
+const l = labels[lang];
+---
+
+<Layout title="MilaGuide" lang={lang} showSidebar={false}>
+  <style>
+    .craigslist-home {
+      padding: 0;
+    }
+    .craigslist-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .craigslist-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      border-top: 1px solid var(--color-border);
+    }
+    .craigslist-col {
+      border-right: 1px solid var(--color-border);
+      padding: 15px;
+    }
+    .craigslist-col:last-child {
+      border-right: none;
+    }
+    .craigslist-col-title {
+      font-weight: bold;
+      font-size: 0.875rem;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--color-border);
+      text-transform: uppercase;
+    }
+    .craigslist-col-title a {
+      color: var(--color-text);
+    }
+    .craigslist-link-group {
+      margin-bottom: 15px;
+    }
+    .craigslist-link-group-title {
+      color: var(--color-muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      letter-spacing: 0.05em;
+    }
+    .craigslist-link-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .craigslist-link-list a {
+      font-size: 0.875rem;
+      color: var(--color-accent);
+    }
+    .craigslist-link-list a:hover {
+      color: var(--color-accent);
+    }
+    .craigslist-item {
+      margin-bottom: 8px;
+    }
+    .craigslist-item-title {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--color-accent);
+    }
+    .craigslist-item-title:hover {
+      color: var(--color-accent);
+    }
+    .craigslist-item-desc {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--color-muted);
+      margin-top: 2px;
+    }
+    @media (max-width: 900px) {
+      .craigslist-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+@media (max-width: 600px) {
+      .craigslist-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+      .craigslist-col {
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+      }
+    }
+      .craigslist-col {
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+      }
+    }
+  </style>
+
+  <div class="craigslist-home">
+    <div class="craigslist-container">
+    <div class="craigslist-columns">
+      <div class="craigslist-col">
+        <div class="craigslist-col-title">
+          <a href={`/${lang}/p`}>{l.products}</a>
+        </div>
+        <div class="craigslist-link-group">
+          <div class="craigslist-link-group-title">{l.recent}</div>
+          <div class="craigslist-link-list">
+            {products.slice(0, 4).map(p => (
+              <div class="craigslist-item">
+                <a class="craigslist-item-title" href={`/${lang}/p/${p.id.replace(`${lang}/`, '').replace('.md', '')}`}>{p.data.title}</a>
+                <span class="craigslist-item-desc">{p.data.description}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="craigslist-link-group">
+          <div class="craigslist-link-group-title">{l.byCategory}</div>
+          <div class="craigslist-link-list">
+            {allTags.slice(0, 8).map(tag => (
+              <a href={`/${lang}/tags/${tag}`}>{tag}</a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="craigslist-col">
+        <div class="craigslist-col-title">
+          <a href={`/${lang}/a`}>{l.articles}</a>
+        </div>
+        <div class="craigslist-link-group">
+          <div class="craigslist-link-group-title">{l.recent}</div>
+          <div class="craigslist-link-list">
+            {articles.slice(0, 4).map(a => (
+              <div class="craigslist-item">
+                <a class="craigslist-item-title" href={`/${lang}/a/${a.id.replace(`${lang}/`, '').replace('.md', '')}`}>{a.data.title}</a>
+                <span class="craigslist-item-desc">{a.data.description}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="craigslist-link-group">
+          <div class="craigslist-link-group-title">{l.byCategory}</div>
+          <div class="craigslist-link-list">
+            {allTags.slice(8, 16).map(tag => (
+              <a href={`/${lang}/tags/${tag}`}>{tag}</a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="craigslist-col">
+        <div class="craigslist-col-title">{l.browseByTag}</div>
+        <div class="craigslist-link-list">
+          {allTags.map(tag => (
+            <a href={`/${lang}/tags/${tag}`}>{tag}</a>
+          ))}
+        </div>
+      </div>
+
+      <div class="craigslist-col">
+        <div class="craigslist-col-title">{l.quickLinks}</div>
+        <div class="craigslist-link-list">
+          <a href={`/${lang}/p`}>{l.products}</a>
+          <a href={`/${lang}/a`}>{l.articles}</a>
+        </div>
+        <div class="craigslist-link-group">
+          <div class="craigslist-link-group-title">Languages</div>
+          <div class="craigslist-link-list">
+            <a href="/en/">English</a>
+            <a href="/ja/">日本語</a>
+            <a href="/ko/">한국어</a>
+            <a href="/zh/">中文</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</Layout>

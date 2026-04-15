@@ -1,0 +1,106 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const languages = ['en', 'ja', 'ko', 'zh'];
+  const paths = [];
+  
+  for (const lang of languages) {
+    const products = await getCollection('products', ({ id }) => id.startsWith(`${lang}/`));
+    const articles = await getCollection('articles', ({ id }) => id.startsWith(`${lang}/`));
+    const allTags = [...new Set([...products, ...articles].flatMap(item => item.data.tags))];
+    
+    for (const tag of allTags) {
+      paths.push({
+        params: { lang, tag },
+        props: { tag, products, articles }
+      });
+    }
+  }
+  
+  return paths;
+}
+
+const { lang, tag } = Astro.params;
+const { products, articles } = Astro.props;
+
+const filteredProducts = products.filter(p => p.data.tags.includes(tag));
+const filteredArticles = articles.filter(a => a.data.tags.includes(tag));
+
+const labels: Record<string, { products: string; articles: string; tag: string }> = {
+  en: { products: 'Products', articles: 'Articles', tag: 'Tag' },
+  ja: { products: '製品', articles: '記事', tag: 'タグ' },
+  ko: { products: '제품', articles: '기사', tag: '태그' },
+  zh: { products: '产品', articles: '文章', tag: '标签' }
+};
+
+const langLabels = labels[lang];
+---
+
+<Layout title={`${langLabels.tag}: ${tag}`} lang={lang}>
+  <h1>{langLabels.tag}: {tag}</h1>
+  
+  <div class="filter-bar">
+    <button class="active" onclick="filterContent('all')">{lang === 'en' ? 'All' : lang === 'ja' ? 'すべて' : lang === 'ko' ? '전체' : '全部'}</button>
+    <button onclick="filterContent('products')">{langLabels.products}</button>
+    <button onclick="filterContent('articles')">{langLabels.articles}</button>
+  </div>
+
+  <div id="products-list" class="card-list">
+    {filteredProducts.map(product => (
+      <article class="card">
+        <h2><a href={`/${lang}/p/${product.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{product.data.title}</a></h2>
+        <div class="meta">
+          <time>{product.data.publishedAt.toLocaleDateString()}</time>
+          <span>[{langLabels.products}]</span>
+        </div>
+        <p>{product.data.description}</p>
+        <div class="tags">
+          {product.data.tags.map(t => (
+            <a href={`/${lang}/tags/${t}`} class="tag">{t}</a>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div id="articles-list" class="card-list">
+    {filteredArticles.map(article => (
+      <article class="card">
+        <h2><a href={`/${lang}/a/${article.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{article.data.title}</a></h2>
+        <div class="meta">
+          <time>{article.data.publishedAt.toLocaleDateString()}</time>
+          <span>[{langLabels.articles}]</span>
+        </div>
+        <p>{article.data.description}</p>
+        <div class="tags">
+          {article.data.tags.map(t => (
+            <a href={`/${lang}/tags/${t}`} class="tag">{t}</a>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <script is:inline>
+    function filterContent(type) {
+      document.querySelectorAll('.filter-bar button').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const productsList = document.getElementById('products-list');
+      const articlesList = document.getElementById('articles-list');
+      
+      if (type === 'all') {
+        productsList.style.display = 'grid';
+        articlesList.style.display = 'grid';
+      } else if (type === 'products') {
+        productsList.style.display = 'grid';
+        articlesList.style.display = 'none';
+      } else {
+        productsList.style.display = 'none';
+        articlesList.style.display = 'grid';
+      }
+    }
+  </script>
+</Layout>

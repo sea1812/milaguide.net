@@ -1,18 +1,24 @@
 import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders'; // 1. 引入加载器
+import { glob } from 'astro/loaders';
 
 const products = defineCollection({
-  // 2. 指定去哪里找文件，匹配什么后缀
-  loader: glob({ pattern: '**/[^_]*.md', base: "./src/content/products" }),
+  loader: glob({ pattern: '**/*.md', base: './src/content/products' }),
   schema: z.object({
     title: z.string(),
-    brand: z.string(),
-    price: z.string(),
-    verdict: z.string(),
-    affiliate_link: z.string(),
-  }),
+    description: z.string(),
+    tags: z.array(z.string()),
+    publishedAt: z.date()
+  })
 });
 
-export const collections = {
-  'products': products,
-};
+const articles = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/articles' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    tags: z.array(z.string()),
+    publishedAt: z.date()
+  })
+});
+
+export const collections = { products, articles };

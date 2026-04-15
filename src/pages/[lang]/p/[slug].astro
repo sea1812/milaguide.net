@@ -1,0 +1,80 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+import { getRelatedItems } from '../../../utils/tagSimilarity';
+
+export async function getStaticPaths() {
+  const languages = ['en', 'ja', 'ko', 'zh'];
+  const paths = [];
+  
+  for (const lang of languages) {
+    const products = await getCollection('products', ({ id }) => id.startsWith(`${lang}/`));
+    
+    for (const product of products) {
+      const slug = product.id.replace(`${lang}/`, '').replace(/\.md$/, '');
+      paths.push({
+        params: { lang, slug },
+        props: { product }
+      });
+    }
+  }
+  
+  return paths;
+}
+
+const { lang, slug } = Astro.params;
+const { product } = Astro.props;
+const { Content } = await render(product);
+
+const allProducts = await getCollection('products', ({ id }) => id.startsWith(`${lang}/`));
+const relatedProducts = getRelatedItems(product, allProducts, 10);
+
+const backLabels: Record<string, string> = {
+  en: '← Back',
+  ja: '← 返回',
+  ko: '← 뒤로',
+  zh: '← 返回'
+};
+
+const relatedLabels: Record<string, { title: string; empty: string }> = {
+  en: { title: 'Related Products', empty: 'No related products found' },
+  ja: { title: '関連製品', empty: '関連する製品はありません' },
+  ko: { title: '관련 제품', empty: '관련 제품이 없습니다' },
+  zh: { title: '相关产品', empty: '暂无相关产品' }
+};
+---
+
+<Layout title={product.data.title} lang={lang}>
+  <a href="#" onclick="window.history.back(); return false;" class="back-link">{backLabels[lang]}</a>
+
+  <article>
+    <h1>{product.data.title}</h1>
+    <div class="meta">
+      <time>{product.data.publishedAt.toLocaleDateString()}</time>
+    </div>
+    <div class="tags">
+      {product.data.tags.map(tag => (
+        <a href={`/${lang}/tags/${tag}`} class="tag">{tag}</a>
+      ))}
+    </div>
+    <div class="content-body">
+      <Content />
+    </div>
+  </article>
+
+  {relatedProducts.length > 0 && (
+    <section class="related-section">
+      <h2>{relatedLabels[lang].title}</h2>
+      <div class="related-list">
+        {relatedProducts.map(p => (
+          <a href={`/${lang}/p/${p.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`} class="related-item">
+            <span class="related-title">{p.data.title}</span>
+            <span class="related-tags">
+              {p.data.tags.slice(0, 3).join(', ')}
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+</Layout>

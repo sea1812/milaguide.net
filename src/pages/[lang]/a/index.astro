@@ -1,0 +1,56 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const languages = ['en', 'ja', 'ko', 'zh'];
+  const paths = [];
+  
+  for (const lang of languages) {
+    const articles = await getCollection('articles', ({ id }) => id.startsWith(`${lang}/`));
+    const allTags = [...new Set(articles.flatMap(a => a.data.tags))];
+    
+    paths.push({ 
+      params: { lang }, 
+      props: { articles, allTags } 
+    });
+  }
+  
+  return paths;
+}
+
+const { lang } = Astro.params;
+const { articles, allTags } = Astro.props;
+
+const sortedArticles = articles.sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+
+const labels: Record<string, { list: string; products: string; articles: string }> = {
+  en: { list: 'Articles', products: 'Products', articles: 'Articles' },
+  ja: { list: '記事', products: '製品', articles: '記事' },
+  ko: { list: '기사', products: '제품', articles: '기사' },
+  zh: { list: '文章', products: '产品', articles: '文章' }
+};
+---
+
+<Layout title={labels[lang].list} lang={lang}>
+  <h1>{labels[lang].list}</h1>
+  
+  <div class="card-list">
+    {sortedArticles.map(article => (
+      <article class="card">
+        <h2><a href={`/${lang}/a/${article.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{article.data.title}</a></h2>
+        <div class="meta">
+          <time>{article.data.publishedAt.toLocaleDateString()}</time>
+        </div>
+        <p>{article.data.description}</p>
+        <div class="tags">
+          {article.data.tags.map(tag => (
+            <a href={`/${lang}/tags/${tag}`} class="tag">{tag}</a>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+</Layout>
