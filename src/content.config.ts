@@ -20,7 +20,8 @@ const articles = defineCollection({
     title: z.string(),
     description: z.string(),
     tags: z.array(z.string()),
-    publishedAt: z.date()
+    publishedAt: z.date(),
+    featured: z.boolean().optional()
   })
 });
 

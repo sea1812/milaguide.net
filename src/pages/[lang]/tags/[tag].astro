@@ -3,7 +3,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  const languages = ['en', 'ja', 'ko', 'zh'];
+  const languages = ['en', 'ja', 'ko', 'zh-hans', 'zh-hant'];
   const paths = [];
   
   for (const lang of languages) {
@@ -32,7 +32,8 @@ const labels: Record<string, { products: string; articles: string; tag: string }
   en: { products: 'Products', articles: 'Articles', tag: 'Tag' },
   ja: { products: '製品', articles: '記事', tag: 'タグ' },
   ko: { products: '제품', articles: '기사', tag: '태그' },
-  zh: { products: '产品', articles: '文章', tag: '标签' }
+  'zh-hans': { products: '产品', articles: '文章', tag: '标签' },
+  'zh-hant': { products: '產品', articles: '文章', tag: '標籤' }
 };
 
 const langLabels = labels[lang];

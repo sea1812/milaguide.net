@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-hant"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Astro入門指南</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/Layout.Cthpv3Sd.css"></head> <body> <header> <nav> <div class="nav-left"> <a href="/zh-hant" class="site-title">MilaGuide</a> <div class="nav-links"> <a href="/zh-hant/p" class> 產品 </a><a href="/zh-hant/a" class="active"> 文章 </a> </div> </div> <div class="nav-right"> <div class="lang-dropdown"> <button class="lang-dropbtn"> 繁體中文 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"> <path fill="currentColor" d="M3 4.5L6 8l3-3.5H3z"></path> </svg> </button> <div class="lang-dropdown-content"> <a href="/en/a/getting-started-astro/" class> English </a><a href="/ja/a/getting-started-astro/" class> 日本語 </a><a href="/ko/a/getting-started-astro/" class> 한국어 </a><a href="/zh-hans/a/getting-started-astro/" class> 简体中文 </a><a href="/zh-hant/a/getting-started-astro/" class="active"> 繁體中文 </a> </div> </div> </div> </nav> </header> <div class="layout-container"> <aside class="sidebar"> <h3></h3> <div class="sidebar-tags"> <a href="/zh-hant/p" class="sidebar-tag">All</a> <a href="/zh-hant/tags/API" class="sidebar-tag "> API </a><a href="/zh-hant/tags/Astro" class="sidebar-tag "> Astro </a><a href="/zh-hant/tags/DevOps" class="sidebar-tag "> DevOps </a><a href="/zh-hant/tags/Web開發" class="sidebar-tag "> Web開發 </a><a href="/zh-hant/tags/同步" class="sidebar-tag "> 同步 </a><a href="/zh-hant/tags/微服務" class="sidebar-tag "> 微服務 </a><a href="/zh-hant/tags/成本管理" class="sidebar-tag "> 成本管理 </a><a href="/zh-hant/tags/教程" class="sidebar-tag "> 教程 </a><a href="/zh-hant/tags/日誌分析" class="sidebar-tag "> 日誌分析 </a><a href="/zh-hant/tags/監控" class="sidebar-tag "> 監控 </a><a href="/zh-hant/tags/資料庫" class="sidebar-tag "> 資料庫 </a><a href="/zh-hant/tags/開源" class="sidebar-tag "> 開源 </a><a href="/zh-hant/tags/雲" class="sidebar-tag "> 雲 </a> </div> </aside> <main>  <a href="#" onclick="window.history.back(); return false;" class="back-link">← 返回</a> <article> <h1> Astro入門指南  </h1> <div class="meta"> <time>4/9/2026</time> </div> <div class="tags"> <a href="/zh-hant/tags/教程" class="tag">教程</a><a href="/zh-hant/tags/Web開發" class="tag">Web開發</a><a href="/zh-hant/tags/Astro" class="tag">Astro</a> </div> <div class="content-body"> <p>Astro是一個現代靜態站點構建器，以其獨特的”island架構”而聞名。</p>
+<h2 id="為什麼選擇astro">為什麼選擇Astro？</h2>
+<p>Astro將HTML放在首位，預設情況下不發送JavaScript，使網站尽可能快。</p>
+<h2 id="核心概念">核心概念</h2>
+<h3 id="內容集合">內容集合</h3>
+<p>Astro的內容集合提供了一種強型別的方式來管理內容。</p>
+<h3 id="island架構">Island架構</h3>
+<p>Astro允許你只對需要互動的組件使用JavaScript。</p>
+<h3 id="組件整合">組件整合</h3>
+<p>Astro支持React、Vue、Svelte等多種框架。</p>
+<h2 id="快速開始">快速開始</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> create</span><span style="color:#9ECBFF"> astro@latest</span><span style="color:#9ECBFF"> my-site</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> my-site</span></span>
+<span class="line"><span style="color:#B392F0">npm</span><span style="color:#9ECBFF"> run</span><span style="color:#9ECBFF"> dev</span></span></code></pre>
+<h2 id="專案結構">專案結構</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>my-site/</span></span>
+<span class="line"><span>├── src/</span></span>
+<span class="line"><span>│   ├── pages/</span></span>
+<span class="line"><span>│   │   └── index.astro</span></span>
+<span class="line"><span>│   └── layouts/</span></span>
+<span class="line"><span>│       └── Layout.astro</span></span>
+<span class="line"><span>├── public/</span></span>
+<span class="line"><span>└── astro.config.mjs</span></span></code></pre>
+<h2 id="下一步">下一步</h2>
+<ul>
+<li>閱讀官方文檔</li>
+<li>加入社群Discord</li>
+<li>探索主題模板</li>
+</ul> </div> </article> <section class="related-section"> <h2>相關產品</h2> <div class="related-list"> <a href="/zh-hant/p/log-analyzer" class="related-item"> <span class="related-title">日誌分析器</span> <span class="related-tags"> 監控, 日誌分析, DevOps </span> </a><a href="/zh-hant/p/datasync-pro" class="related-item"> <span class="related-title">DataSync Pro</span> <span class="related-tags"> 開源, 資料庫, 同步 </span> </a><a href="/zh-hant/p/cost-firewall" class="related-item"> <span class="related-title">成本防火牆</span> <span class="related-tags"> 開源, 雲, 成本管理 </span> </a><a href="/zh-hant/p/api-gateway-lite" class="related-item"> <span class="related-title">API網關Lite</span> <span class="related-tags"> 開源, API, 微服務 </span> </a> </div> </section> </main> </div> <footer> <p>&copy; 2026 MilaGuide. All rights reserved.</p> </footer> </body></html>
