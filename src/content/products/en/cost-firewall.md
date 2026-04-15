@@ -3,6 +3,8 @@ title: "Cost Firewall"
 description: "An open-source cost management tool for cloud infrastructure"
 tags: ["open-source", "cloud", "cost-management"]
 publishedAt: 2026-04-10
+iherbLink: "https://iherb.com/cost-firewall"
+price: "$29.99"
 ---
 
 Cost Firewall helps you monitor and control your cloud spending across multiple providers.

@@ -42,6 +42,13 @@ const relatedLabels: Record<string, { title: string; empty: string }> = {
   ko: { title: '관련 제품', empty: '관련 제품이 없습니다' },
   zh: { title: '相关产品', empty: '暂无相关产品' }
 };
+
+const iherbLabels: Record<string, string> = {
+  en: 'Buy on iHerb',
+  ja: 'iHerbで買う',
+  ko: 'iHerb에서 구매',
+  zh: '去iHerb购买'
+};
 ---
 
 <Layout title={product.data.title} lang={lang}>
@@ -60,6 +67,12 @@ const relatedLabels: Record<string, { title: string; empty: string }> = {
     <div class="content-body">
       <Content />
     </div>
+    {product.data.iherbLink && (
+      <div class="iherb-banner">
+        {product.data.price && <span class="iherb-price">{product.data.price}</span>}
+        <a href={product.data.iherbLink} target="_blank" rel="noopener noreferrer" class="iherb-btn">{iherbLabels[lang]}</a>
+      </div>
+    )}
   </article>
 
   {relatedProducts.length > 0 && (

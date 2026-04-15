@@ -7,7 +7,9 @@ const products = defineCollection({
     title: z.string(),
     description: z.string(),
     tags: z.array(z.string()),
-    publishedAt: z.date()
+    publishedAt: z.date(),
+    iherbLink: z.string().optional(),
+    price: z.string().optional()
   })
 });
 
