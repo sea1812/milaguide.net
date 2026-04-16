@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
 
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -9,10 +8,6 @@ const languages = [
   { code: 'zh-hans', name: '简体中文', flag: '🇨🇳' },
   { code: 'zh-hant', name: '繁體中文', flag: '🇹🇼' }
 ];
-
-const enProducts = await getCollection('products', ({ id }) => id.startsWith('en/'));
-const enArticles = await getCollection('articles', ({ id }) => id.startsWith('en/'));
-const enTags = [...new Set([...enProducts, ...enArticles].flatMap(item => item.data.tags))];
 ---
 
 <Layout title="MilaGuide" lang="en" showSidebar={false}>
@@ -53,155 +48,15 @@ const enTags = [...new Set([...enProducts, ...enArticles].flatMap(item => item.d
       color: var(--color-accent);
       text-decoration: none;
     }
-    .craigslist-home {
-      padding: 0;
-    }
-    .craigslist-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 1rem;
-    }
-    .craigslist-columns {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      border-top: 1px solid #ccc;
-    }
-    .craigslist-col {
-      border-right: 1px solid #ccc;
-      padding: 15px;
-    }
-    .craigslist-col:last-child {
-      border-right: none;
-    }
-    .craigslist-col-title {
-      font-weight: bold;
-      font-size: 0.875rem;
-      margin-bottom: 12px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #eee;
-      text-transform: uppercase;
-    }
-    .craigslist-col-title a {
-      color: var(--color-text);
-    }
-    .craigslist-link-group {
-      margin-bottom: 15px;
-    }
-    .craigslist-link-group-title {
-      color: var(--color-muted);
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      margin-bottom: 5px;
-      letter-spacing: 0.05em;
-    }
-    .craigslist-link-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .craigslist-link-list a {
-      font-size: 0.875rem;
-      color: #0000ee;
-    }
-    .craigslist-link-list a:hover {
-      color: var(--color-accent);
-    }
-    @media (max-width: 900px) {
-      .craigslist-columns {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    @media (max-width: 600px) {
-      .craigslist-columns {
-        grid-template-columns: 1fr;
-      }
-      .craigslist-col {
-        border-right: none;
-        border-bottom: 1px solid #ccc;
-      }
-    }
   </style>
-
-  <div class="craigslist-home">
-    <div class="craigslist-container">
-    <div class="craigslist-columns">
-      <div class="craigslist-col">
-        <div class="craigslist-col-title"><a href="/en/p">Products</a></div>
-        <div class="craigslist-link-group">
-          <div class="craigslist-link-group-title">Recent</div>
-          <div class="craigslist-link-list">
-            {enProducts.slice(0, 4).map(p => (
-              <a href={`/en/p/${p.id.replace('en/', '').replace('.md', '')}`}>{p.data.title}</a>
-            ))}
-          </div>
-        </div>
-        <div class="craigslist-link-group">
-          <div class="craigslist-link-group-title">by Category</div>
-          <div class="craigslist-link-list">
-            {enTags.slice(0, 8).map(tag => (
-              <a href={`/en/tags/${tag}`}>{tag}</a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div class="craigslist-col">
-        <div class="craigslist-col-title"><a href="/en/a">Articles</a></div>
-        <div class="craigslist-link-group">
-          <div class="craigslist-link-group-title">Recent</div>
-          <div class="craigslist-link-list">
-            {enArticles.slice(0, 4).map(a => (
-              <a href={`/en/a/${a.id.replace('en/', '').replace('.md', '')}`}>{a.data.title}</a>
-            ))}
-          </div>
-        </div>
-        <div class="craigslist-link-group">
-          <div class="craigslist-link-group-title">by Category</div>
-          <div class="craigslist-link-list">
-            {enTags.slice(8, 16).map(tag => (
-              <a href={`/en/tags/${tag}`}>{tag}</a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div class="craigslist-col">
-        <div class="craigslist-col-title">Browse by Tag</div>
-        <div class="craigslist-link-list">
-          {enTags.map(tag => (
-            <a href={`/en/tags/${tag}`}>{tag}</a>
-          ))}
-        </div>
-      </div>
-
-      <div class="craigslist-col">
-        <div class="craigslist-col-title">Quick Links</div>
-        <div class="craigslist-link-list">
-          <a href="/en/p">Products</a>
-          <a href="/en/a">Articles</a>
-        </div>
-        <div class="craigslist-link-group">
-          <div class="craigslist-link-group-title">Languages</div>
-          <div class="craigslist-link-list">
-            <a href="/en/">English</a>
-            <a href="/ja/">日本語</a>
-            <a href="/ko/">한국어</a>
-            <a href="/zh-hans/">简体中文</a>
-            <a href="/zh-hant/">繁體中文</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-  </div>
-
-  <script is:inline>
-    const userLang = navigator.language || navigator.userLanguage || 'en';
-    const lang = userLang.toLowerCase().split('-')[0];
-    const supportedLangs = ['en', 'ja', 'ko', 'zh-hans', 'zh-hant'];
-    const targetLang = supportedLangs.includes(lang) ? lang : 'en';
-    if (window.location.pathname === '/') {
-      window.location.href = '/' + targetLang + '/';
-    }
-  </script>
 </Layout>
+
+<script is:inline>
+  const userLang = navigator.language || navigator.userLanguage || 'en';
+  const lang = userLang.toLowerCase().split('-')[0];
+  const supportedLangs = ['en', 'ja', 'ko', 'zh-hans', 'zh-hant'];
+  const targetLang = supportedLangs.includes(lang) ? lang : 'en';
+  if (window.location.pathname === '/') {
+    window.location.href = '/' + targetLang + '/';
+  }
+</script>

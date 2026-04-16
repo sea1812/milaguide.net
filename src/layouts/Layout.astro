@@ -49,10 +49,10 @@ const tagLabels: Record<string, string> = {
   en: 'Tags',
   ja: 'タグ',
   ko: '태그',
-  zh: '标签'
+  'zh-hans': '标签',
+  'zh-hant': '標籤'
 };
 ---
-
 <!DOCTYPE html>
 <html lang={lang}>
 <head>
@@ -68,16 +68,18 @@ const tagLabels: Record<string, string> = {
     <nav>
       <div class="nav-left">
         <a href={`/${lang}`} class="site-title">MilaGuide</a>
-        <div class="nav-links">
-          {navItems.map(item => (
-            <a 
-              href={item.path}
-              class={isActive(item.path) ? 'active' : ''}
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
+        {!showSidebar && (
+          <div class="nav-links">
+            {navItems.map(item => (
+              <a
+                href={item.path}
+                class={isActive(item.path) ? 'active' : ''}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
       <div class="nav-right">
         <div class="lang-dropdown">
