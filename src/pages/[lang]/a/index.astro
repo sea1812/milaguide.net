@@ -46,8 +46,8 @@ const featuredLabels: Record<string, string> = {
 ---
 
 <Layout title={labels[lang].list} lang={lang}>
-  <h1>{labels[lang].list}</h1>
-  
+  <h1 class="page-title-hidden">{labels[lang].list}</h1>
+
   <div class="card-list">
     {sortedArticles.map(article => (
       <article class="card">
