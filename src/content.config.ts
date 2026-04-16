@@ -9,7 +9,6 @@ const products = defineCollection({
     tags: z.array(z.string()),
     publishedAt: z.date(),
     iherbLink: z.string().optional(),
-    price: z.string().optional(),
     featured: z.boolean().optional()
   })
 });
@@ -21,6 +20,7 @@ const articles = defineCollection({
     description: z.string(),
     tags: z.array(z.string()),
     publishedAt: z.date(),
+    link: z.string().optional(),
     featured: z.boolean().optional()
   })
 });

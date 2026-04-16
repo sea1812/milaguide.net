@@ -4,7 +4,6 @@ description: "クラウドインフラストラクチャ向けのオープンソ
 tags: ["オープンソース", "クラウド", "コスト管理"]
 publishedAt: 2026-04-10
 iherbLink: "https://jp.iherb.com/cost-firewall"
-price: "¥4,500"
 featured: true
 ---
 

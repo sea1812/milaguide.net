@@ -4,7 +4,6 @@ description: "클라우드 인프라를 위한 오픈소스 비용 관리 도구
 tags: ["오픈소스", "클라우드", "비용관리"]
 publishedAt: 2026-04-10
 iherbLink: "https://kr.iherb.com/cost-firewall"
-price: "₩39,000"
 featured: true
 ---
 

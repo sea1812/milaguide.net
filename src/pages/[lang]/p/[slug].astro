@@ -46,11 +46,11 @@ const relatedLabels: Record<string, { title: string; empty: string }> = {
 };
 
 const iherbLabels: Record<string, string> = {
-  en: 'Buy on iHerb',
-  ja: 'iHerbで買う',
-  ko: 'iHerb에서 구매',
-  'zh-hans': '去iHerb购买',
-  'zh-hant': '去iHerb購買'
+  en: 'Visit',
+  ja: '訪問',
+  ko: '방문',
+  'zh-hans': '访问',
+  'zh-hant': '訪問'
 };
 
 const featuredLabels: Record<string, string> = {
@@ -82,9 +82,8 @@ const featuredLabels: Record<string, string> = {
       <Content />
     </div>
     {product.data.iherbLink && (
-      <div class="iherb-banner">
-        {product.data.price && <span class="iherb-price">{product.data.price}</span>}
-        <a href={product.data.iherbLink} target="_blank" rel="noopener noreferrer" class="iherb-btn">{iherbLabels[lang]}</a>
+      <div class="external-link">
+        <a href={product.data.iherbLink} target="_blank" rel="noopener noreferrer">{iherbLabels[lang]}: {product.data.iherbLink}</a>
       </div>
     )}
   </article>

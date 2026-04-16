@@ -4,7 +4,6 @@ description: "用於雲端基礎設施的開源成本管理工具"
 tags: ["開源", "雲", "成本管理"]
 publishedAt: 2026-04-10
 iherbLink: "https://cn.iherb.com/cost-firewall"
-price: "¥299"
 featured: true
 ---
 
