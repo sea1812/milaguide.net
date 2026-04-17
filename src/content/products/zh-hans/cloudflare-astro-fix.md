@@ -1,6 +1,6 @@
 ---
 title: "Fix: Cloudflare Pages 部署 Astro 项目时的 522 错误与构建失败"
-
+description: "解决 Astro 部署到 Cloudflare 时常见的环境依赖与 522 路由超时问题。"
 tags: ["Astro", "Cloudflare Pages", "DNS", "DevOps"]
 publishedAt: 2026-04-17
 ---
