@@ -103,12 +103,30 @@ header .site-title:hover {
   color: var(--color-accent);
 }
 
+header .nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+header .header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid var(--color-border);
+}
+
 header .site-slogan {
   font-size: 0.875rem;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+header .site-tagline {
+  font-size: 0.75rem;
   color: var(--color-muted);
-  margin-left: 0.5rem;
-  padding-left: 0.5rem;
-  border-left: 1px solid var(--color-border);
+  font-style: italic;
 }
 
 .page-title-hidden {

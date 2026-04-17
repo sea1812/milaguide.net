@@ -26,6 +26,11 @@ const siteSlogan: Record<string, string> = {
   en: '30 Years of Logic, Literature, and Life'
 };
 
+const siteTagline: Record<string, string> = {
+  'zh-hans': '喧嚣世界，唯求常量。',
+  en: 'In a world of noise, I seek the constants.'
+};
+
 const categoryLabels: Record<string, Record<string, string>> = {
   'zh-hans': { logic: '逻辑', epoch: '时代', stills: '静谧', echoes: '回响', vault: '宝库' },
   en: { logic: 'Logic', epoch: 'Epoch', stills: 'Stills', echoes: 'Echoes', vault: 'Vault' }
@@ -37,8 +42,8 @@ const sidebarHeading: Record<string, string> = {
 };
 
 const footerText: Record<string, string> = {
-  'zh-hans': '用心与逻辑书写 by Mila。创作主轴未经 AI 介入。',
-  en: 'Written with heart and logic by Mila. No AI was used for primary creation.'
+  'zh-hans': 'Mila Guide：数字时代的人类思想净土。无 Cookie，无追踪。',
+  en: 'Mila Guide: A quiet corner of authentic human thought in a digital age. No cookies, no tracking.'
 };
 
 const currentPath = Astro.url.pathname;
@@ -62,7 +67,10 @@ const categories = ['logic', 'epoch', 'stills', 'echoes', 'vault'];
     <nav>
       <div class="nav-left">
         <a href={`/${lang}`} class="site-title">{siteTitle[lang]}</a>
-        <span class="site-slogan">{siteSlogan[lang]}</span>
+        <div class="header-text">
+          <span class="site-slogan">{siteSlogan[lang]}</span>
+          <span class="site-tagline">{siteTagline[lang]}</span>
+        </div>
         {!showSidebar && (
           <div class="nav-links">
             <a href={`/${lang}`}>Home</a>
