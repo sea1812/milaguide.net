@@ -1,5 +1,4 @@
 ---
-
 title: "Fix: Cloudflare Pages 部署 Astro 项目时的 522 错误与构建失败"
 description: "解决 Astro 部署到 Cloudflare 时常见的环境依赖与 522 路由超时问题。"
 tags: ["Astro", "Cloudflare Pages", "DNS", "DevOps"]
@@ -10,18 +9,18 @@ featured: false
 
 ---
 
-### 1. 现象 (The Issue)
+## 1. 现象 (The Issue)
 
 在将 Astro 项目部署到 Cloudflare Pages 后，访问自定义域名时出现 **Error 522 (Connection timed out)**，或者在构建日志中提示找不到 `package.json` 或 `index.html`。
 
-### 2. 原因剖析 (Root Cause)
+## 2. 原因剖析 (Root Cause)
 
 通常由两个原因导致：
 
 * **误入 Workers 流程**：在 Cloudflare 后台错误选择了“创建 Worker”而非“创建 Pages”，导致系统尝试以脚本方式运行整个框架。
 * **DNS 路由未挂载**：自定义域名虽然解析到了 Cloudflare，但未在 Pages 项目的“自定义域”中正式初始化，导致网关无法定位源服务器。
 
-### 3. 解决方案 (The Fix)
+## 3. 解决方案 (The Fix)
 
 #### 步骤 A：纠正项目类型
 
