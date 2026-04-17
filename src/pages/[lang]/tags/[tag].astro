@@ -36,14 +36,17 @@ const featuredLabels: Record<string, string> = {
   en: 'Featured'
 };
 
-const tagLabels: Record<string, string> = {
-  'zh-hans': '标签',
-  en: 'Tag'
+const filterLabels: Record<string, { title: string; clear: string }> = {
+  'zh-hans': { title: '筛选中', clear: '清除筛选' },
+  en: { title: 'Filtered by', clear: 'Clear filter' }
 };
 ---
 
-<Layout title={`${tagLabels[lang]}: ${tag}`} lang={lang}>
-  <h1 class="page-title-hidden">{tagLabels[lang]}: {tag}</h1>
+<Layout title={`${filterLabels[lang].title}: ${tag}`} lang={lang}>
+  <div class="filter-banner">
+    <span>{filterLabels[lang].title}: <strong>{tag}</strong></span>
+    <a href={`/${lang}/logic`} class="clear-filter">{filterLabels[lang].clear} ×</a>
+  </div>
 
   <div class="card-list">
     {sortedItems.map(item => (
@@ -59,7 +62,7 @@ const tagLabels: Record<string, string> = {
         {item.data.tags && (
           <div class="tags">
             {item.data.tags.map(t => (
-              <a href={`/${lang}/tags/${t}`} class="tag">{t}</a>
+              <a href={`/${lang}/tags/${t}`} class={`tag ${t === tag ? 'tag-active' : ''}`}>{t}</a>
             ))}
           </div>
         )}
@@ -67,3 +70,39 @@ const tagLabels: Record<string, string> = {
     ))}
   </div>
 </Layout>
+
+<style>
+  .filter-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--color-border);
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .filter-banner strong {
+    color: var(--color-accent);
+  }
+
+  .clear-filter {
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+
+  .clear-filter:hover {
+    background: var(--color-muted);
+    color: white;
+    text-decoration: none;
+  }
+
+  .tag-active {
+    background: var(--color-accent);
+    color: white;
+  }
+</style>
