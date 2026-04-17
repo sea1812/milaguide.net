@@ -1,7 +1,7 @@
 ---
 title: "Fix: Cloudflare Pages 部署 Astro 项目时的 522 错误与构建失败"
-date: 2026-04-14
 tags: ["Astro", "Cloudflare Pages", "DNS", "DevOps"]
+publishedAt: 2026-04-10
 ---
 
 ### 1. 现象 (The Issue)
