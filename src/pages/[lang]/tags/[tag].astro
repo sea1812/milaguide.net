@@ -3,17 +3,17 @@ import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  const languages = ['en', 'ja', 'ko', 'zh-hans', 'zh-hant'];
+  const languages = ['zh-hans', 'en'];
   const paths = [];
 
   for (const lang of languages) {
-    const knowledge = await getCollection('knowledge', ({ id }) => id.startsWith(`${lang}/`));
-    const allTags = [...new Set(knowledge.flatMap(item => item.data.tags))];
+    const logic = await getCollection('logic', ({ id }) => id.startsWith(`${lang}/`));
+    const allTags = [...new Set(logic.flatMap(item => item.data.tags || []))];
 
     for (const tag of allTags) {
       paths.push({
         params: { lang, tag },
-        props: { tag, knowledge }
+        props: { tag, logic }
       });
     }
   }
@@ -22,29 +22,23 @@ export async function getStaticPaths() {
 }
 
 const { lang, tag } = Astro.params;
-const { knowledge } = Astro.props;
+const { logic } = Astro.props;
 
-const filteredKnowledge = knowledge.filter(item => item.data.tags.includes(tag));
-const sortedItems = filteredKnowledge.sort((a, b) => {
+const filteredLogic = logic.filter(item => item.data.tags && item.data.tags.includes(tag));
+const sortedItems = filteredLogic.sort((a, b) => {
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
   return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
 });
 
 const featuredLabels: Record<string, string> = {
-  en: 'Featured',
-  ja: '注目',
-  ko: '추천',
   'zh-hans': '精选',
-  'zh-hant': '精選'
+  en: 'Featured'
 };
 
 const tagLabels: Record<string, string> = {
-  en: 'Tag',
-  ja: 'タグ',
-  ko: '태그',
   'zh-hans': '标签',
-  'zh-hant': '標籤'
+  en: 'Tag'
 };
 ---
 
@@ -55,18 +49,20 @@ const tagLabels: Record<string, string> = {
     {sortedItems.map(item => (
       <article class="card">
         <h2>
-          <a href={`/${lang}/kb/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
+          <a href={`/${lang}/logic/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
           {item.data.featured && <span class="featured-badge">{featuredLabels[lang]}</span>}
         </h2>
         <div class="meta">
-          <time>{item.data.publishedAt.toLocaleDateString()}</time>
+          <time>{item.data.publishedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
         </div>
-        <p>{item.data.description}</p>
-        <div class="tags">
-          {item.data.tags.map(t => (
-            <a href={`/${lang}/tags/${t}`} class="tag">{t}</a>
-          ))}
-        </div>
+        {item.data.description && <p>{item.data.description}</p>}
+        {item.data.tags && (
+          <div class="tags">
+            {item.data.tags.map(t => (
+              <a href={`/${lang}/tags/${t}`} class="tag">{t}</a>
+            ))}
+          </div>
+        )}
       </article>
     ))}
   </div>

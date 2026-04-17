@@ -1,0 +1,56 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'zh-hans' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params;
+
+const items = await getCollection('logic', ({ id }) => id.startsWith(`${lang}/`));
+const sortedItems = items.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+});
+
+const labels: Record<string, { title: string }> = {
+  'zh-hans': { title: 'Logic' },
+  en: { title: 'Logic' }
+};
+
+const featuredLabels: Record<string, string> = {
+  'zh-hans': '精选',
+  en: 'Featured'
+};
+---
+
+<Layout title={labels[lang].title} lang={lang}>
+  <h1>{labels[lang].title}</h1>
+
+  <div class="card-list">
+    {sortedItems.map(item => (
+      <article class="card">
+        <h2>
+          <a href={`/${lang}/logic/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
+          {item.data.featured && <span class="featured-badge">{featuredLabels[lang]}</span>}
+        </h2>
+        <div class="meta">
+          <time>{item.data.publishedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+        </div>
+        {item.data.description && <p>{item.data.description}</p>}
+        {item.data.tags && item.data.tags.length > 0 && (
+          <div class="tags">
+            {item.data.tags.map(tag => (
+              <a href={`/${lang}/tags/${tag}`} class="tag">{tag}</a>
+            ))}
+          </div>
+        )}
+      </article>
+    ))}
+  </div>
+</Layout>

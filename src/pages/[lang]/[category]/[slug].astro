@@ -1,0 +1,90 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+import { getRelatedItems } from '../../../utils/tagSimilarity';
+
+export async function getStaticPaths() {
+  const languages = ['zh-hans', 'en'];
+  const categories = ['logic', 'epoch', 'stills', 'echoes'];
+  const paths = [];
+
+  for (const lang of languages) {
+    for (const category of categories) {
+      const items = await getCollection(category, ({ id }) => id.startsWith(`${lang}/`));
+      for (const item of items) {
+        const slug = item.id.replace(`${lang}/`, '').replace(/\.md$/, '');
+        paths.push({
+          params: { lang, category, slug },
+          props: { item, category }
+        });
+      }
+    }
+  }
+
+  return paths;
+}
+
+const { lang, category, slug } = Astro.params;
+const { item } = Astro.props;
+
+const { Content } = await render(item);
+
+const allItems = await getCollection(category, ({ id }) => id.startsWith(`${lang}/`));
+const relatedItems = getRelatedItems(item, allItems, 10);
+
+const backLabels: Record<string, string> = {
+  'zh-hans': '← 返回',
+  en: '← Back'
+};
+
+const relatedLabels: Record<string, { title: string }> = {
+  'zh-hans': { title: '相关' },
+  en: { title: 'Related' }
+};
+
+const featuredLabels: Record<string, string> = {
+  'zh-hans': '精选',
+  en: 'Featured'
+};
+
+function getItemUrl(item: any, lang: string, cat: string) {
+  return `/${lang}/${cat}/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`;
+}
+---
+
+<Layout title={item.data.title} lang={lang}>
+  <a href="#" onclick="window.history.back(); return false;" class="back-link">{backLabels[lang]}</a>
+
+  <article>
+    <h1>
+      {item.data.title}
+      {item.data.featured && <span class="featured-badge">{featuredLabels[lang]}</span>}
+    </h1>
+    <div class="meta">
+      <time>{item.data.publishedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+    </div>
+    {item.data.tags && item.data.tags.length > 0 && (
+      <div class="tags">
+        {item.data.tags.map(tag => (
+          <a href={`/${lang}/tags/${tag}`} class="tag">{tag}</a>
+        ))}
+      </div>
+    )}
+    <div class="content-body">
+      <Content />
+    </div>
+  </article>
+
+  {relatedItems.length > 0 && (
+    <section class="related-section">
+      <h2>{relatedLabels[lang].title}</h2>
+      <div class="related-list">
+        {relatedItems.map(ri => (
+          <a href={getItemUrl(ri, lang, category)} class="related-item">
+            <span class="related-title">{ri.data.title}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+</Layout>

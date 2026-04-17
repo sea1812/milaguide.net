@@ -1,10 +1,11 @@
 :root {
-  --color-bg: #ffffff;
-  --color-text: #1a1a1a;
-  --color-accent: #e63946;
-  --color-muted: #6b7280;
-  --color-border: #e5e5e5;
-  --font-family: 'Noto Sans', sans-serif;
+  --color-bg: #FDFCF8;
+  --color-text: #2C3E50;
+  --color-accent: #8B7355;
+  --color-muted: #7F8C8D;
+  --color-border: #E8E4DE;
+  --font-family: 'Noto Sans', 'Noto Sans SC', sans-serif;
+  --font-family-serif: Georgia, 'Noto Serif SC', serif;
 }
 
 * {
@@ -34,6 +35,11 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-family-serif);
+  font-weight: 600;
 }
 
 h1 {
@@ -86,7 +92,8 @@ header .nav-right {
 }
 
 header .site-title {
-  font-size: 1.25rem;
+  font-family: var(--font-family-serif);
+  font-size: 1.5rem;
   font-weight: bold;
   color: var(--color-text);
 }
