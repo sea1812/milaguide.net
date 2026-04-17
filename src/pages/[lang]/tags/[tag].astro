@@ -7,14 +7,13 @@ export async function getStaticPaths() {
   const paths = [];
 
   for (const lang of languages) {
-    const products = await getCollection('products', ({ id }) => id.startsWith(`${lang}/`));
-    const articles = await getCollection('articles', ({ id }) => id.startsWith(`${lang}/`));
-    const allTags = [...new Set([...products, ...articles].flatMap(item => item.data.tags))];
+    const knowledge = await getCollection('knowledge', ({ id }) => id.startsWith(`${lang}/`));
+    const allTags = [...new Set(knowledge.flatMap(item => item.data.tags))];
 
     for (const tag of allTags) {
       paths.push({
         params: { lang, tag },
-        props: { tag, products, articles }
+        props: { tag, knowledge }
       });
     }
   }
@@ -23,11 +22,10 @@ export async function getStaticPaths() {
 }
 
 const { lang, tag } = Astro.params;
-const { products, articles } = Astro.props;
+const { knowledge } = Astro.props;
 
-const filteredProducts = products.filter(p => p.data.tags.includes(tag));
-const filteredArticles = articles.filter(a => a.data.tags.includes(tag));
-const allContent = [...filteredProducts, ...filteredArticles].sort((a, b) => {
+const filteredKnowledge = knowledge.filter(item => item.data.tags.includes(tag));
+const sortedItems = filteredKnowledge.sort((a, b) => {
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
   return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
@@ -54,10 +52,10 @@ const tagLabels: Record<string, string> = {
   <h1 class="page-title-hidden">{tagLabels[lang]}: {tag}</h1>
 
   <div class="card-list">
-    {allContent.map(item => (
+    {sortedItems.map(item => (
       <article class="card">
         <h2>
-          <a href={`/${lang}/${item.collection === 'products' ? 'p' : 'a'}/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
+          <a href={`/${lang}/kb/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
           {item.data.featured && <span class="featured-badge">{featuredLabels[lang]}</span>}
         </h2>
         <div class="meta">

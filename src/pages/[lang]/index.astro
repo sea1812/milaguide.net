@@ -14,10 +14,9 @@ export function getStaticPaths() {
 
 const { lang } = Astro.params;
 
-const products = await getCollection('products', ({ id }) => id.startsWith(`${lang}/`));
-const articles = await getCollection('articles', ({ id }) => id.startsWith(`${lang}/`));
+const knowledge = await getCollection('knowledge', ({ id }) => id.startsWith(`${lang}/`));
 
-const sortedItems = [...products, ...articles].sort((a, b) => {
+const sortedItems = knowledge.sort((a, b) => {
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
   return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
@@ -47,7 +46,7 @@ const featuredLabels: Record<string, string> = {
     {sortedItems.map(item => (
       <article class="card">
         <h2>
-          <a href={`/${lang}/${item.collection === 'products' ? 'p' : 'a'}/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
+          <a href={`/${lang}/kb/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
           {item.data.featured && <span class="featured-badge">{featuredLabels[lang]}</span>}
         </h2>
         <div class="meta">

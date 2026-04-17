@@ -23,26 +23,10 @@ const currentPath = Astro.url.pathname;
 const isTagPage = currentPath.includes('/tags/');
 const pathWithoutLang = isTagPage ? '' : currentPath.replace(/^\/(en|ja|ko|zh-hans|zh-hant)/, '');
 
-const navLabels: Record<string, { products: string; articles: string }> = {
-  en: { products: 'Products', articles: 'Articles' },
-  ja: { products: '製品', articles: '記事' },
-  ko: { products: '제품', articles: '기사' },
-  'zh-hans': { products: '产品', articles: '文章' },
-  'zh-hant': { products: '產品', articles: '文章' }
-};
-
-const navItems = [
-  { label: navLabels[lang].products, path: `/${lang}/p` },
-  { label: navLabels[lang].articles, path: `/${lang}/a` }
-];
-
-const isActive = (path: string) => currentPath.startsWith(path);
-
 let allTags: string[] = [];
 if (showSidebar) {
-  const products = await getCollection('products', ({ id }) => id.startsWith(`${lang}/`));
-  const articles = await getCollection('articles', ({ id }) => id.startsWith(`${lang}/`));
-  allTags = [...new Set([...products, ...articles].flatMap(item => item.data.tags))].sort((a, b) => a.localeCompare(b));
+  const knowledge = await getCollection('knowledge', ({ id }) => id.startsWith(`${lang}/`));
+  allTags = [...new Set(knowledge.flatMap(item => item.data.tags))].sort((a, b) => a.localeCompare(b));
 }
 
 const tagLabels: Record<string, string> = {
@@ -71,14 +55,7 @@ const tagLabels: Record<string, string> = {
         <span class="site-slogan">AI Tools Problems & Fixes</span>
         {!showSidebar && (
           <div class="nav-links">
-            {navItems.map(item => (
-              <a
-                href={item.path}
-                class={isActive(item.path) ? 'active' : ''}
-              >
-                {item.label}
-              </a>
-            ))}
+            <a href={`/${lang}`}>Home</a>
           </div>
         )}
       </div>
@@ -92,7 +69,7 @@ const tagLabels: Record<string, string> = {
           </button>
           <div class="lang-dropdown-content">
             {languages.map(l => (
-              <a 
+              <a
                 href={`/${l}${pathWithoutLang}`}
                 class={l === lang ? 'active' : ''}
               >
@@ -112,8 +89,8 @@ const tagLabels: Record<string, string> = {
         <div class="sidebar-tags">
           <a href={`/${lang}`} class="sidebar-tag">All</a>
           {allTags.map(tag => (
-            <a 
-              href={`/${lang}/tags/${tag}`} 
+            <a
+              href={`/${lang}/tags/${tag}`}
               class={`sidebar-tag ${currentPath.includes(`/tags/${tag}`) ? 'active' : ''}`}
             >
               {tag}
