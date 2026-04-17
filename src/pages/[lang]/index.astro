@@ -31,14 +31,6 @@ const labels: Record<string, string> = {
   'zh-hant': 'AI工具問題與修復'
 };
 
-const typeLabels: Record<string, { product: string; article: string }> = {
-  en: { product: 'Product', article: 'Article' },
-  ja: { product: '製品', article: '記事' },
-  ko: { product: '製品', article: '기사' },
-  'zh-hans': { product: '产品', article: '文章' },
-  'zh-hant': { product: '產品', article: '文章' }
-};
-
 const featuredLabels: Record<string, string> = {
   en: 'Featured',
   ja: '注目',
@@ -60,7 +52,6 @@ const featuredLabels: Record<string, string> = {
         </h2>
         <div class="meta">
           <time>{item.data.publishedAt.toLocaleDateString()}</time>
-          <span>[{typeLabels[lang][item.collection === 'products' ? 'product' : 'article']}]</span>
         </div>
         <p>{item.data.description}</p>
         <div class="tags">

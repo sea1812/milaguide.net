@@ -110,7 +110,7 @@ const tagLabels: Record<string, string> = {
       <aside class="sidebar">
         <h3>{tagLabels[lang]}</h3>
         <div class="sidebar-tags">
-          <a href={`/${lang}/p`} class="sidebar-tag">All</a>
+          <a href={`/${lang}`} class="sidebar-tag">All</a>
           {allTags.map(tag => (
             <a 
               href={`/${lang}/tags/${tag}`} 

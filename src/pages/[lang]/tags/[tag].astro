@@ -5,12 +5,12 @@ import { getCollection } from 'astro:content';
 export async function getStaticPaths() {
   const languages = ['en', 'ja', 'ko', 'zh-hans', 'zh-hant'];
   const paths = [];
-  
+
   for (const lang of languages) {
     const products = await getCollection('products', ({ id }) => id.startsWith(`${lang}/`));
     const articles = await getCollection('articles', ({ id }) => id.startsWith(`${lang}/`));
     const allTags = [...new Set([...products, ...articles].flatMap(item => item.data.tags))];
-    
+
     for (const tag of allTags) {
       paths.push({
         params: { lang, tag },
@@ -18,7 +18,7 @@ export async function getStaticPaths() {
       });
     }
   }
-  
+
   return paths;
 }
 
@@ -27,81 +27,49 @@ const { products, articles } = Astro.props;
 
 const filteredProducts = products.filter(p => p.data.tags.includes(tag));
 const filteredArticles = articles.filter(a => a.data.tags.includes(tag));
+const allContent = [...filteredProducts, ...filteredArticles].sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
+});
 
-const labels: Record<string, { products: string; articles: string; tag: string }> = {
-  en: { products: 'Products', articles: 'Articles', tag: 'Tag' },
-  ja: { products: '製品', articles: '記事', tag: 'タグ' },
-  ko: { products: '제품', articles: '기사', tag: '태그' },
-  'zh-hans': { products: '产品', articles: '文章', tag: '标签' },
-  'zh-hant': { products: '產品', articles: '文章', tag: '標籤' }
+const featuredLabels: Record<string, string> = {
+  en: 'Featured',
+  ja: '注目',
+  ko: '추천',
+  'zh-hans': '精选',
+  'zh-hant': '精選'
 };
 
-const langLabels = labels[lang];
+const tagLabels: Record<string, string> = {
+  en: 'Tag',
+  ja: 'タグ',
+  ko: '태그',
+  'zh-hans': '标签',
+  'zh-hant': '標籤'
+};
 ---
 
-<Layout title={`${langLabels.tag}: ${tag}`} lang={lang}>
-  <h1>{langLabels.tag}: {tag}</h1>
-  
-  <div class="filter-bar">
-    <button class="active" onclick="filterContent('all')">{lang === 'en' ? 'All' : lang === 'ja' ? 'すべて' : lang === 'ko' ? '전체' : '全部'}</button>
-    <button onclick="filterContent('products')">{langLabels.products}</button>
-    <button onclick="filterContent('articles')">{langLabels.articles}</button>
-  </div>
+<Layout title={`${tagLabels[lang]}: ${tag}`} lang={lang}>
+  <h1 class="page-title-hidden">{tagLabels[lang]}: {tag}</h1>
 
-  <div id="products-list" class="card-list">
-    {filteredProducts.map(product => (
+  <div class="card-list">
+    {allContent.map(item => (
       <article class="card">
-        <h2><a href={`/${lang}/p/${product.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{product.data.title}</a></h2>
+        <h2>
+          <a href={`/${lang}/${item.collection === 'products' ? 'p' : 'a'}/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
+          {item.data.featured && <span class="featured-badge">{featuredLabels[lang]}</span>}
+        </h2>
         <div class="meta">
-          <time>{product.data.publishedAt.toLocaleDateString()}</time>
-          <span>[{langLabels.products}]</span>
+          <time>{item.data.publishedAt.toLocaleDateString()}</time>
         </div>
-        <p>{product.data.description}</p>
+        <p>{item.data.description}</p>
         <div class="tags">
-          {product.data.tags.map(t => (
+          {item.data.tags.map(t => (
             <a href={`/${lang}/tags/${t}`} class="tag">{t}</a>
           ))}
         </div>
       </article>
     ))}
   </div>
-
-  <div id="articles-list" class="card-list">
-    {filteredArticles.map(article => (
-      <article class="card">
-        <h2><a href={`/${lang}/a/${article.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{article.data.title}</a></h2>
-        <div class="meta">
-          <time>{article.data.publishedAt.toLocaleDateString()}</time>
-          <span>[{langLabels.articles}]</span>
-        </div>
-        <p>{article.data.description}</p>
-        <div class="tags">
-          {article.data.tags.map(t => (
-            <a href={`/${lang}/tags/${t}`} class="tag">{t}</a>
-          ))}
-        </div>
-      </article>
-    ))}
-  </div>
-
-  <script is:inline>
-    function filterContent(type) {
-      document.querySelectorAll('.filter-bar button').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
-      
-      const productsList = document.getElementById('products-list');
-      const articlesList = document.getElementById('articles-list');
-      
-      if (type === 'all') {
-        productsList.style.display = 'grid';
-        articlesList.style.display = 'grid';
-      } else if (type === 'products') {
-        productsList.style.display = 'grid';
-        articlesList.style.display = 'none';
-      } else {
-        productsList.style.display = 'none';
-        articlesList.style.display = 'grid';
-      }
-    }
-  </script>
 </Layout>
