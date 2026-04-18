@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="zh-hans"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>消失的确定性：从 BASIC 到 Prompt</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/Layout.vp08fIaL.css"></head> <body> <header> <nav> <div class="nav-left"> <a href="/zh-hans" class="site-title">Mila</a> <div class="header-text"> <span class="site-slogan">三十年逻辑、文学与生活</span> <span class="site-tagline">喧嚣世界，唯求常量。</span> </div>  </div> <div class="nav-right"> <div class="header-links"> <a href="/zh-hans/about">关于</a> </div> <div class="lang-dropdown"> <button class="lang-dropbtn"> 简体中文 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"> <path fill="currentColor" d="M3 4.5L6 8l3-3.5H3z"></path> </svg> </button> <div class="lang-dropdown-content"> <a href="/zh-hans/logic/logic-vanishing-determinism/" class="active"> 简体中文 </a><a href="/en/logic/logic-vanishing-determinism/" class> English </a> </div> </div> </div> </nav> </header> <div class="layout-container"> <aside class="sidebar"> <h3>分类</h3> <div class="sidebar-tags"> <a href="/zh-hans/logic" class="sidebar-tag active"> 逻辑 </a><a href="/zh-hans/epoch" class="sidebar-tag "> 时代 </a><a href="/zh-hans/stills" class="sidebar-tag "> 静谧 </a><a href="/zh-hans/echoes" class="sidebar-tag "> 回响 </a><a href="/zh-hans/vault" class="sidebar-tag "> 宝库 </a> </div> </aside> <main>  <a href="#" onclick="window.history.back(); return false;" class="back-link">← 返回</a> <article> <h1> 消失的确定性：从 BASIC 到 Prompt  </h1> <div class="meta"> <time>April 18, 2026</time> </div> <div class="tags"> <a href="/zh-hans/tags/架构哲学" class="tag">架构哲学</a><a href="/zh-hans/tags/逻辑主权" class="tag">逻辑主权</a><a href="/zh-hans/tags/确定性" class="tag">确定性</a> </div> <div class="content-body"> <p>虽然 Apple BASIC 在 2026 年看起来像是一把生锈的石斧，但它在计算机史上拥有不可磨灭的逻辑价值。它的意义不在于功能的强大，而在于它赋予了用户一种<strong>完全的底层主权</strong>。</p>
+<p>在 Apple II 上敲下 <code>10 PRINT</code> 的那一刻，你与硬件之间没有任何黑盒。没有复杂的 API 层，没有臃肿的虚拟机，更没有 AI 在背后猜测你的意图。代码的运行结果是绝对<strong>确定</strong>的——如果错了，那是你的逻辑错了，而不是系统在“耍脾气”。</p>
+<p>这种“一砖一瓦”构建世界的纯粹感，是现代过度封装的开发环境（如庞大的 JS 框架或各种大模型代理）所严重缺失的。</p>
+<h4 id="逻辑实验直接对话-6502">逻辑实验：直接对话 6502</h4>
+<p>这是 1987 年最硬核的玩法——用 BASIC 作为载体，将机器码（Machine Code）直接注入内存地址。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>10  REM --- INJECT MACHINE CODE TO MEMORY ---</span></span>
+<span class="line"><span>20  DATA 162, 0, 189, 0, 4, 157, 0, 5, 232, 208, 245, 96</span></span>
+<span class="line"><span>30  FOR I = 768 TO 779 : READ D : POKE I, D : NEXT I</span></span>
+<span class="line"><span>40  PRINT "EXECUTING LOGIC AT ADR 768..."</span></span>
+<span class="line"><span>50  CALL 768</span></span></code></pre>
+<h4 id="为什么这段代码代表了主权">为什么这段代码代表了“主权”？</h4>
+<ul>
+<li>
+<p><strong>DATA &#x26; READ</strong>：数据不再是抽象的对象，而是原始的字节数组。</p>
+</li>
+<li>
+<p><strong>POKE</strong>：这个指令是真正的“上帝之手”。<code>POKE 768, D</code> 意味着你跳过了所有保护层，直接改写了物理内存上的每一个比特。</p>
+</li>
+<li>
+<p><strong>PEEK</strong>：如果你想知道机器在想什么，你不需要调试器，你只需要 <code>PEEK</code> 一下地址，芯片的秘密就无处遁形。</p>
+</li>
+</ul>
+<h3 id="逻辑的颗粒度">逻辑的颗粒度</h3>
+<ul>
+<li>
+<p><strong>1987 年</strong>：逻辑的颗粒度是<strong>字节 (Byte)</strong>。你必须精准地控制每一个开关，每一行代码的代价都是指尖与硬塑料的真实搏斗。</p>
+</li>
+<li>
+<p><strong>2026 年</strong>：逻辑的颗粒度变成了<strong>自然语言 (Prompt)</strong>。我们虽然效率惊人，却正在逐渐丧失对底层的掌控。代码不再是凿在石板上的指令，而更像是扔进黑盒里的祈祷。</p>
+</li>
+</ul>
+<p>这种从“直接掌控”到“间接描述”的演进，究竟是进化，还是某种形式的退化？</p>
+<blockquote>
+<p>我建立 <strong>Mila</strong>，并不是为了复古。我只是想在漫天的 AI 概率云中，重新找回那点即便在 1987 年也能被握在手里的、确凿无疑的逻辑。在那个只有 64KB 内存的宇宙里，逻辑是没有阴影的。</p>
+</blockquote> </div> </article>  </main> </div> <footer> <p>Mila Guide：数字时代的人类思想净土。无 Cookie，无追踪。</p> </footer> </body></html>

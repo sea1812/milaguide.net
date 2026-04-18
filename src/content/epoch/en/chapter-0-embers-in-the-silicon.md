@@ -14,7 +14,7 @@ The high school computer lab of 1987 was a sanctuary. To enter, one had to don a
 
 I remember sliding a flimsy 5.25-inch floppy disk into the drive. The machine groaned and clicked, and a green cursor began to blink on the screen. Everyone held their breath in the silence, as if waiting for a sacred ritual to commence. It was a world away from the instant gratification of flipping open a MacBook today. That sense of "anticipation" born from delay is something modern, lightning-fast efficiency has rendered extinct.
 
-![。](https://nicole.express/assets/a2p-2.JPG)
+<img src="https://nicole.express/assets/a2p-2.JPG" title="" alt="。" data-align="center">
 
 The heart of it all was hidden inside a black ceramic square known as the **6502**. Back then, it was my God.
 
