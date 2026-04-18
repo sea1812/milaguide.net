@@ -133,6 +133,28 @@ header .site-tagline {
   display: none;
 }
 
+header .header-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 1rem;
+}
+
+header .header-links a {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+}
+
+header .header-links a:hover {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+header .header-sep {
+  color: var(--color-border);
+  font-size: 0.8rem;
+}
+
 header .nav-links {
   display: flex;
   gap: 1.5rem;
