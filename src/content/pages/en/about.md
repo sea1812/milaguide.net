@@ -1,5 +1,5 @@
 ---
-title: "The Origins of Mila: A Thirty-Year Journey through Logic and Life"
+title: "The Origins of Mila"
 ---
 
 **In an era of relentless noise, Mila stands as a quiet anchor.**
