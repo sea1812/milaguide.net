@@ -11,9 +11,18 @@ export function getStaticPaths() {
 
 const { lang } = Astro.params;
 
-const logic = await getCollection('logic', ({ id }) => id.startsWith(`${lang}/`));
+const collections = ['logic', 'epoch', 'stills', 'echoes', 'vault'];
+const allItems = [];
 
-const sortedItems = logic.sort((a, b) => {
+for (const coll of collections) {
+  try {
+    const items = await getCollection(coll, ({ id }) => id.startsWith(`${lang}/`));
+    allItems.push(...items);
+  } catch (e) {
+  }
+}
+
+const sortedItems = allItems.sort((a, b) => {
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
   return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
@@ -27,10 +36,13 @@ const featuredLabels: Record<string, string> = {
 
 <Layout title="Mila" lang={lang} showSidebar={true}>
   <div class="card-list">
-    {sortedItems.map(item => (
+    {sortedItems.map(item => {
+      const category = item.collection;
+      const slug = item.id.replace(`${lang}/`, '').replace(/\.md$/, '');
+      return (
       <article class="card">
         <h2>
-          <a href={`/${lang}/logic/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
+          <a href={`/${lang}/${category}/${slug}`}>{item.data.title}</a>
           {item.data.featured && <span class="featured-badge">{featuredLabels[lang]}</span>}
         </h2>
         <div class="meta">
@@ -45,6 +57,7 @@ const featuredLabels: Record<string, string> = {
           </div>
         )}
       </article>
-    ))}
+      );
+    })}
   </div>
 </Layout>
