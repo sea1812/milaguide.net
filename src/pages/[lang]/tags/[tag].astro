@@ -4,16 +4,24 @@ import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const languages = ['zh-hans', 'en'];
+  const collections = ['logic', 'epoch', 'stills', 'echoes', 'vault'];
   const paths = [];
 
   for (const lang of languages) {
-    const logic = await getCollection('logic', ({ id }) => id.startsWith(`${lang}/`));
-    const allTags = [...new Set(logic.flatMap(item => item.data.tags || []))];
+    const allItems = [];
+    for (const coll of collections) {
+      try {
+        const items = await getCollection(coll, ({ id }) => id.startsWith(`${lang}/`));
+        allItems.push(...items);
+      } catch (e) {
+      }
+    }
+    const allTags = [...new Set(allItems.flatMap(item => item.data.tags || []))];
 
     for (const tag of allTags) {
       paths.push({
         params: { lang, tag },
-        props: { tag, logic }
+        props: { tag, allItems }
       });
     }
   }
@@ -21,11 +29,11 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { lang, tag } = Astro.params;
-const { logic } = Astro.props;
+const { lang } = Astro.params;
+const { tag, allItems } = Astro.props;
 
-const filteredLogic = logic.filter(item => item.data.tags && item.data.tags.includes(tag));
-const sortedItems = filteredLogic.sort((a, b) => {
+const filteredItems = allItems.filter(item => item.data.tags && item.data.tags.includes(tag));
+const sortedItems = filteredItems.sort((a, b) => {
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
   return b.data.publishedAt.getTime() - a.data.publishedAt.getTime();
@@ -45,14 +53,14 @@ const filterLabels: Record<string, { title: string; clear: string }> = {
 <Layout title={`${filterLabels[lang].title}: ${tag}`} lang={lang}>
   <div class="filter-banner">
     <span>{filterLabels[lang].title}: <strong>{tag}</strong></span>
-    <a href={`/${lang}/logic`} class="clear-filter">{filterLabels[lang].clear} ×</a>
+    <a href={`/${lang}`} class="clear-filter">{filterLabels[lang].clear} ×</a>
   </div>
 
   <div class="card-list">
     {sortedItems.map(item => (
       <article class="card">
         <h2>
-          <a href={`/${lang}/logic/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
+          <a href={`/${lang}/${item.collection}/${item.id.replace(`${lang}/`, '').replace(/\.md$/, '')}`}>{item.data.title}</a>
           {item.data.featured && <span class="featured-badge">{featuredLabels[lang]}</span>}
         </h2>
         <div class="meta">
@@ -62,7 +70,7 @@ const filterLabels: Record<string, { title: string; clear: string }> = {
         {item.data.tags && (
           <div class="tags">
             {item.data.tags.map(t => (
-              <a href={`/${lang}/tags/${t}`} class={`tag ${t === tag ? 'tag-active' : ''}`}>{t}</a>
+              <a href={`/${lang}/tags/${encodeURIComponent(t)}`} class={`tag ${t === tag ? 'tag-active' : ''}`}>{t}</a>
             ))}
           </div>
         )}

@@ -66,7 +66,7 @@ function getItemUrl(item: any, lang: string, cat: string) {
     {item.data.tags && item.data.tags.length > 0 && (
       <div class="tags">
         {item.data.tags.map(tag => (
-          <a href={`/${lang}/tags/${tag}`} class="tag">{tag}</a>
+          <a href={`/${lang}/tags/${encodeURIComponent(tag)}`} class="tag">{tag}</a>
         ))}
       </div>
     )}
