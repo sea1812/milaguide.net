@@ -127,6 +127,11 @@ const categories = ['logic', 'epoch', 'stills', 'echoes', 'vault'];
 
   <footer>
     <p>{footerText[lang]}</p>
+    <nav class="footer-nav">
+      <a href={`/${lang}/about`}>{lang === 'zh-hans' ? '关于' : 'About'}</a>
+      <span class="footer-sep">·</span>
+      <a href={`/${lang}/contribute`}>{lang === 'zh-hans' ? '投稿' : 'Contribute'}</a>
+    </nav>
   </footer>
 </body>
 </html>

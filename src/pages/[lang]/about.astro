@@ -1,0 +1,40 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'zh-hans' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params;
+
+const pages = await getCollection('pages');
+const pageId = `${lang}/about`;
+const page = pages.find(p => p.id === pageId);
+
+if (!page) {
+  return Astro.redirect(`/${lang}`);
+}
+
+const { Content } = await render(page);
+---
+
+<Layout title={page.data.title} lang={lang}>
+  <h1>{page.data.title}</h1>
+  <div class="content-body">
+    <Content />
+  </div>
+</Layout>
+
+<style>
+  .content-body {
+    max-width: 640px;
+    line-height: 1.8;
+  }
+  .content-body p {
+    margin-bottom: 1.5rem;
+  }
+</style>

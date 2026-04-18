@@ -266,6 +266,26 @@ footer {
   font-size: 0.875rem;
 }
 
+footer .footer-nav {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+footer .footer-nav a {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+}
+
+footer .footer-nav a:hover {
+  color: var(--color-accent);
+}
+
+footer .footer-sep {
+  color: var(--color-border);
+}
+
 .card-list {
   display: grid;
   gap: 1rem;
