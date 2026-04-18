@@ -2,7 +2,7 @@
 title: Contribute
 ---
 
-I welcome deep technical insights. If you have a story to tell, you can leave your mark here.
+I welcome deep technical insights. If you have a story to tell, you can leave your mark here. [jiang5630@outlook.com](mailto:jiang5630@outlook.com)
 
 ## Requirements
 
